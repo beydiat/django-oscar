@@ -37,6 +37,7 @@ services:
       - ./configs/oscar/settings.py:/app/sandbox/settings.py
       - ./configs/supervisord/oscar.conf:/etc/supervisor/conf.d/oscar.conf
       - ./scripts/sandbox.sh:/sandbox.sh
+      - ./app:/app
 
   nginx:
     image: trydirect/nginx:latest
@@ -45,7 +46,7 @@ services:
       .env
     ports:
       - "80:80"
-      #- "443:443"
+      - "443:443"
     volumes:
       - ./configs/certs/ssl:/etc/ssl/nginx
       - ./configs/certs/letsencrypt:/etc/letsencrypt
@@ -54,6 +55,7 @@ services:
       - ./configs/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./configs/null:/etc/nginx/sites-enabled
       - ./configs/supervisord/nginx.conf:/etc/supervisor/conf.d/nginx.conf
+      - ./app/sandbox/public:/usr/share/nginx/html
     depends_on:
       - oscar
     links:
